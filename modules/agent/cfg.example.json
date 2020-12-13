@@ -1,27 +1,28 @@
 {
-    "debug": true,
-    "hostname": "",
+    "debug": false,
+    "hostname": "ifconfig `route|grep '^default'|awk '{print $NF}'`|grep inet|awk '{print $2}'|awk -F ':' '{print $NF}'|head -n 1",
+    "ntpServers": ["ntp0001.eniot.io"],
     "ip": "",
     "plugin": {
-        "enabled": false,
-        "dir": "./plugin",
-        "git": "https://github.com/open-falcon/plugin.git",
-        "logs": "./logs"
+        "enabled": true,
+        "dir": "/home/envuser/falcon/agent/plugins",
+        "git": "http://git.envisioncn.com/falcon/falcon-plugin.git",
+        "logs": "/home/envuser/falcon/agent/logs"
     },
     "heartbeat": {
         "enabled": true,
-        "addr": "127.0.0.1:6030",
+        "addr": "falcon0001.eniot.io:6030",
         "interval": 60,
         "timeout": 1000
     },
     "transfer": {
         "enabled": true,
         "addrs": [
-            "127.0.0.1:8433",
-            "127.0.0.1:8433"
+            "falcon0001.eniot.io:8433",
+                        "falcon0002.eniot.io:8433"
         ],
         "interval": 60,
-        "timeout": 1000
+        "timeout": 3000
     },
     "http": {
         "enabled": true,
@@ -29,27 +30,11 @@
         "backdoor": false
     },
     "collector": {
-        "ifacePrefix": ["eth", "em", "ens"],
+        "ifacePrefix": ["eth", "en", "em"],
         "mountPoint": []
     },
     "default_tags": {
     },
     "ignore": {
-        "cpu.busy": true,
-        "df.bytes.free": true,
-        "df.bytes.total": true,
-        "df.bytes.used": true,
-        "df.bytes.used.percent": true,
-        "df.inodes.total": true,
-        "df.inodes.free": true,
-        "df.inodes.used": true,
-        "df.inodes.used.percent": true,
-        "mem.memtotal": true,
-        "mem.memused": true,
-        "mem.memused.percent": true,
-        "mem.memfree": true,
-        "mem.swaptotal": true,
-        "mem.swapused": true,
-        "mem.swapfree": true
     }
 }
