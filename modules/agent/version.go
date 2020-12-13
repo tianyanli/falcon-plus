@@ -16,7 +16,7 @@
 package main
 
 var (
-	Version    = "<UNDEFINED>"
-	GitCommit  = "<UNDEFINED>"
-	BinaryName = "<UNDEFINED>"
+	Version    = "3.0.0"
+	GitCommit  = "2020-12-13"
+	BinaryName = "falcon-agent"
 )
