@@ -28,8 +28,8 @@ func NtpOffsetMetrics() []*model.MetricValue {
 			ntpServer = server
 		}
 		orgTime := time.Now()
-		log.Println("ntp: use server:", ntpServer)
-		log.Println("ntp: client send time, ", orgTime)
+		//log.Println("ntp: use server:", ntpServer)
+		//log.Println("ntp: client send time, ", orgTime)
 		//logger.Debug("ntp: use server, ", ntpServer)
 		//logger.Debug("ntp: client send time, ", orgTime)
 		serverReciveTime, serverTransmitTime, err := nux.NtpTwoTime(ntpServer)
@@ -45,9 +45,9 @@ func NtpOffsetMetrics() []*model.MetricValue {
 		dstTime := time.Now()
 		// 算法见https://en.wikipedia.org/wiki/Network_Time_Protocol
 		duration := ((serverReciveTime.UnixNano() - orgTime.UnixNano()) + (serverTransmitTime.UnixNano() - dstTime.UnixNano())) / 2
-		log.Println("ntp: server receive time, ", serverReciveTime)
-		log.Println("ntp: server reply time, ", serverTransmitTime)
-		log.Println("ntp: client receive time, ", dstTime)
+		//log.Println("ntp: server receive time, ", serverReciveTime)
+		//log.Println("ntp: server reply time, ", serverTransmitTime)
+		//log.Println("ntp: client receive time, ", dstTime)
 		//logger.Debug("ntp: server receive time, ", serverReciveTime)
 		//logger.Debug("ntp: server reply time, ", serverTransmitTime)
 		//logger.Debug("ntp: client receive time, ", dstTime)
