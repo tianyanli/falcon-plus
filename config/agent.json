@@ -1,7 +1,7 @@
 {
     "debug": true,
-    "ntpServers": [],
-    "hostname": "",
+    "ntpServers": ["ntp0001.eniot.io"],
+    "hostname": "ifconfig `route|grep '^default'|awk '{print $NF}'`|grep inet|awk '{print $2}'|awk -F ':' '{print $NF}'|head -n 1",
     "ip": "",
     "plugin": {
         "enabled": false,
