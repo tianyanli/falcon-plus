@@ -16,8 +16,10 @@ package g
 
 import (
 	"encoding/json"
+	"github.com/toolkits/pkg/sys"
 	"log"
 	"os"
+	"strings"
 	"sync"
 
 	"github.com/toolkits/file"
@@ -59,6 +61,7 @@ type GlobalConfig struct {
 	Debug         bool              `json:"debug"`
 	Hostname      string            `json:"hostname"`
 	IP            string            `json:"ip"`
+	NtpServers    []string            `json:"ntpServers"`
 	Plugin        *PluginConfig     `json:"plugin"`
 	Heartbeat     *HeartbeatConfig  `json:"heartbeat"`
 	Transfer      *TransferConfig   `json:"transfer"`
@@ -72,7 +75,10 @@ var (
 	ConfigFile string
 	config     *GlobalConfig
 	lock       = new(sync.RWMutex)
+	Identity string
 )
+
+
 
 func Config() *GlobalConfig {
 	lock.RLock()
@@ -82,6 +88,15 @@ func Config() *GlobalConfig {
 
 func Hostname() (string, error) {
 	hostname := Config().Hostname
+	if strings.Contains(hostname, "ifocnfig")  {
+		var err error
+		Identity, err = sys.CmdOutTrim("bash", "-c", hostname)
+		if err != nil {
+			log.Println("[F] cannot get identity")
+		}
+		hostname := "edge-" + Identity
+		return hostname, err
+	}
 	if hostname != "" {
 		return hostname, nil
 	}
