@@ -88,14 +88,14 @@ func Config() *GlobalConfig {
 
 func Hostname() (string, error) {
 	hostname := Config().Hostname
-	if strings.Contains(hostname, "ifocnfig")  {
+	if strings.Contains(hostname, "ifconfig")  {
 		var err error
 		Identity, err = sys.CmdOutTrim("bash", "-c", hostname)
 		if err != nil {
 			log.Println("[F] cannot get identity")
 		}
 		hostname := "edge-" + Identity
-		return hostname, err
+		return hostname, nil
 	}
 	if hostname != "" {
 		return hostname, nil
