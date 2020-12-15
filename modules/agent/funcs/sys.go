@@ -3,7 +3,6 @@ package funcs
 import (
 	"log"
 	"math"
-	"nightingale-master/src/dataobj"
 	"strconv"
 "strings"
 
@@ -58,7 +57,7 @@ func ProcsNumMetrics() []*model.MetricValue {
 		num += 1
 	}
 
-	return []*dataobj.MetricValue{
+	return []*model.MetricValue{
 		GaugeValue("sys.ps.process.total", num),
 	}
 }
