@@ -11,7 +11,6 @@ import (
 "github.com/toolkits/pkg/nux"
 
  "github.com/open-falcon/falcon-plus/common/model"
-  "github.com/open-falcon/falcon-plus/modules/agent/g"
 )
 
 func FsKernelMetrics() []*model.MetricValue {

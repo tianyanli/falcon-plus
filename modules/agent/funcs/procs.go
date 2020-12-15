@@ -16,7 +16,6 @@ package funcs
 
 import (
 	"github.com/open-falcon/falcon-plus/common/model"
-	process "github.com/shirou/gopsutil/process"
 	"github.com/open-falcon/falcon-plus/modules/agent/g"
 	"github.com/toolkits/nux"
 	"log"
@@ -44,35 +43,13 @@ func ProcMetrics() (L []*model.MetricValue) {
 		for i := 0; i < pslen; i++ {
 			if is_a(ps[i], m) {
 				cnt++
-				procCache := m
-				mem, err := procCache.MemoryInfo()
-				if err != nil {
-					log.Println("获取内存错误", err)
-					continue
-				}
-				memUsedTotal += mem.RSS
-				memUtil, err := procCache.MemoryPercent()
-				if err != nil {
-					log.Println(err)
-					continue
-				}
-				memUtilTotal += float64(memUtil)
-				cpuUtil, err := procCache.Percent(0)
-				if err != nil {
-					log.Println(err)
-					continue
-				}
-				cpuUtilTotal += cpuUtil
 			}
-
-			L = append(L, GaugeValue(g.PROC_NUM, cnt, tags))
-			L = append(L, GaugeValue("proc.mem.used", memUsedTotal, tags))
-			L = append(L, GaugeValue("proc.mem.util", memUtilTotal, tags))
-			L = append(L, GaugeValue("proc.cpu.util", cpuUtilTotal, tags))
 		}
 
-		return
+		L = append(L, GaugeValue(g.PROC_NUM, cnt, tags))
 	}
+
+	return
 }
 
 func is_a(p *nux.Proc, m map[int]string) bool {
