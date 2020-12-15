@@ -47,31 +47,32 @@ func ProcMetrics() (L []*model.MetricValue) {
 				procCache := m
 				mem, err := procCache.MemoryInfo()
 				if err != nil {
-					log.Println("获取内存错误",err)
+					log.Println("获取内存错误", err)
 					continue
 				}
 				memUsedTotal += mem.RSS
 				memUtil, err := procCache.MemoryPercent()
-			if err != nil {
-				log.Println(err)
-				continue
+				if err != nil {
+					log.Println(err)
+					continue
+				}
+				memUtilTotal += float64(memUtil)
+				cpuUtil, err := procCache.Percent(0)
+				if err != nil {
+					log.Println(err)
+					continue
+				}
+				cpuUtilTotal += cpuUtil
 			}
-			memUtilTotal += float64(memUtil)
-			cpuUtil, err := procCache.Percent(0)
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-			cpuUtilTotal += cpuUtil
+
+			L = append(L, GaugeValue(g.PROC_NUM, cnt, tags))
+			L = append(L, GaugeValue("proc.mem.used", memUsedTotal, tags))
+			L = append(L, GaugeValue("proc.mem.util", memUtilTotal, tags))
+			L = append(L, GaugeValue("proc.cpu.util", cpuUtilTotal, tags))
 		}
 
-		L = append(L, GaugeValue(g.PROC_NUM, cnt, tags))
-		L = append(L, GaugeValue("proc.mem.used", memUsedTotal, tags))
-		L = append(L, GaugeValue("proc.mem.util", memUtilTotal, tags))
-		L = append(L, GaugeValue("proc.cpu.util", cpuUtilTotal, tags))
+		return
 	}
-
-	return
 }
 
 func is_a(p *nux.Proc, m map[int]string) bool {
