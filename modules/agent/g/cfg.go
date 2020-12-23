@@ -60,8 +60,9 @@ type CollectorConfig struct {
 type GlobalConfig struct {
 	Debug         bool              `json:"debug"`
 	Hostname      string            `json:"hostname"`
+	Types         string            `json:"types"`
 	IP            string            `json:"ip"`
-	NtpServers    []string            `json:"ntpServers"`
+	NtpServers    []string          `json:"ntpServers"`
 	Plugin        *PluginConfig     `json:"plugin"`
 	Heartbeat     *HeartbeatConfig  `json:"heartbeat"`
 	Transfer      *TransferConfig   `json:"transfer"`
@@ -75,10 +76,8 @@ var (
 	ConfigFile string
 	config     *GlobalConfig
 	lock       = new(sync.RWMutex)
-	Identity string
+	Identity   string
 )
-
-
 
 func Config() *GlobalConfig {
 	lock.RLock()
@@ -88,14 +87,20 @@ func Config() *GlobalConfig {
 
 func Hostname() (string, error) {
 	hostname := Config().Hostname
-	if strings.Contains(hostname, "ifconfig")  {
+	types := Config().Types
+	if strings.Contains(hostname, "ifconfig") {
 		var err error
 		Identity, err = sys.CmdOutTrim("bash", "-c", hostname)
 		if err != nil {
 			log.Println("[F] cannot get identity")
 		}
-		hostname := "edge-" + Identity
-		return hostname, nil
+		if types != "" && len(types) != 0 {
+			hostname := types + "-" + Identity
+			return hostname, nil
+		} else {
+			hostname = Identity
+			return hostname, nil
+		}
 	}
 	if hostname != "" {
 		return hostname, nil
