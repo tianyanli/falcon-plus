@@ -14,7 +14,10 @@
 
 package g
 
-import log "github.com/sirupsen/logrus"
+import (
+	log "github.com/sirupsen/logrus"
+	"os"
+)
 
 func InitLog(level string) (err error) {
 	switch level {
@@ -28,4 +31,13 @@ func InitLog(level string) (err error) {
 		log.Fatal("log conf only allow [info, debug, warn], please check your confguire")
 	}
 	return
+}
+func LogConfig(cfg string) {
+	if cfg == "" {
+		logFile, err := os.OpenFile(cfg, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+		if err != nil {
+			panic(err)
+		}
+		log.SetOutput(logFile)
+	}
 }

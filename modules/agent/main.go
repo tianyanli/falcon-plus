@@ -33,6 +33,7 @@ func main() {
 	cfg := flag.String("c", "cfg.json", "configuration file")
 	version := flag.Bool("v", false, "show version")
 	check := flag.Bool("check", false, "check collector")
+	logF := flag.String("log", "./logs/agent.log", "Log file name") //将运行时参数 地址 绑定到logF 运行时没带参数默认logF为agent.log
 
 	flag.Parse()
 
@@ -47,6 +48,7 @@ func main() {
 	}
 
 	g.ParseConfig(*cfg)
+	g.LogConfig(*logF)
 
 	if g.Config().Debug {
 		g.InitLog("debug")
